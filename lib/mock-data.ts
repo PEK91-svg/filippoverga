@@ -1,4 +1,4 @@
-import { Project, Quote, LineItem, CanonicalItem, Flag, PriceBenchmark, TaxIncentive } from './types';
+import { Project, Quote, LineItem, CanonicalItem, Flag, PriceBenchmark } from './types';
 
 export interface VerifiedVendor {
   id: string;
@@ -1285,38 +1285,3 @@ export const MOCK_PRICE_BENCHMARKS: PriceBenchmark[] = [
   { id: 'bm-09', category_id: 'cat-09', province: 'MI', unit: 'mq', p25: 28, p50: 34, p75: 42, sample_size: 180, updated_at: '2026-08-01' }
 ];
 
-export const MOCK_TAX_INCENTIVES: TaxIncentive[] = [
-  {
-    code: 'BONUS_CASA_50',
-    name: 'Bonus Ristrutturazione 50%',
-    rate: 50,
-    cap_amount: 96000,
-    valid_from: '2026-01-01',
-    valid_to: '2026-12-31',
-    requires_prima_casa: true,
-    applicable_categories: ['02', '04', '05', '06', '07', '08', '09', '11', '12', '13', '14', '17'],
-    law_reference: 'Art. 16-bis D.P.R. 917/1986 (TUIR) - Legge di Bilancio 2026'
-  },
-  {
-    code: 'ECOBONUS_65',
-    name: 'Ecobonus Efficienza Energetica 65%',
-    rate: 65,
-    cap_amount: 100000,
-    valid_from: '2026-01-01',
-    valid_to: '2026-12-31',
-    requires_prima_casa: false,
-    applicable_categories: ['07', '11'],
-    law_reference: 'Art. 14 D.L. 63/2013 - Requisiti tecnici D.M. 6 agosto 2020'
-  },
-  {
-    code: 'BONUS_CASA_36',
-    name: 'Bonus Ristrutturazione Altre Abitazioni 36%',
-    rate: 36,
-    cap_amount: 48000,
-    valid_from: '2026-01-01',
-    valid_to: '2026-12-31',
-    requires_prima_casa: false,
-    applicable_categories: ['02', '04', '05', '06', '08', '09', '14'],
-    law_reference: 'Art. 16-bis D.P.R. 917/1986 per seconde case e immobili locati'
-  }
-];

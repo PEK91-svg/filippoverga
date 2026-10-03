@@ -10,14 +10,13 @@ import {
   Scale, 
   Percent
 } from 'lucide-react';
-import { estimateTaxDeduction } from '@/lib/engine-mock';
+import { TAX_INCENTIVE_CODES, estimateTaxDeduction } from '@/lib/tax-incentives';
 import { formatCurrency } from '@/lib/utils';
 
 export default function PrivatiPage() {
   const [customExpense, setCustomExpense] = useState(50000);
-  const [isPrimaCasa] = useState(true);
 
-  const taxSim = estimateTaxDeduction(customExpense, isPrimaCasa);
+  const taxSim = estimateTaxDeduction(customExpense, TAX_INCENTIVE_CODES.bonusCasaAbitazionePrincipale);
 
   return (
     <div className="space-y-16 max-w-6xl mx-auto py-4">
@@ -141,16 +140,17 @@ export default function PrivatiPage() {
               <div className="flex justify-between text-[11px] text-slate-400 mt-1">
                 <span>€ 10.000</span>
                 <span>€ 50.000</span>
-                <span>€ 100.000 (Tetto Max)</span>
+                <span>€ 100.000</span>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
               <div className="font-bold text-slate-900">Riepilogo Fiscale Dettagliato:</div>
               <ul className="space-y-1 text-slate-600">
-                <li>• Spesa lorda con IVA 10%: <strong>{formatCurrency(customExpense * 1.10)}</strong></li>
-                <li>• Quota detraibile al 50%: <strong>{formatCurrency(taxSim.totalDeduction)}</strong></li>
-                <li>• Rata annuale scalata dalle tasse: <strong className="text-emerald-700">{formatCurrency(taxSim.annualInstallment)} / anno</strong> per 10 anni</li>
+                <li>• Spesa lorda stimata: <strong>{formatCurrency(taxSim.grossExpense)}</strong></li>
+                <li>• Tetto di spesa dell&apos;agevolazione: <strong>{formatCurrency(taxSim.incentive.capAmount)}</strong></li>
+                <li>• Quota detraibile al {taxSim.incentive.ratePercent}%: <strong>{formatCurrency(taxSim.totalDeduction)}</strong></li>
+                <li>• Rata annuale scalata dalle tasse: <strong className="text-emerald-700">{formatCurrency(taxSim.annualInstallment)} / anno</strong> per {taxSim.incentive.installmentYears} anni</li>
               </ul>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function PrivatiPage() {
               {formatCurrency(taxSim.totalDeduction)}
             </div>
             <div className="text-xs text-slate-400">
-              Corrispondenti a <strong className="text-blue-400">{formatCurrency(taxSim.annualInstallment)}</strong> scalati ogni anno per 10 anni dal tuo 730 / Redditi.
+              Corrispondenti a <strong className="text-blue-400">{formatCurrency(taxSim.annualInstallment)}</strong> scalati ogni anno per {taxSim.incentive.installmentYears} anni dal tuo 730 / Redditi.
             </div>
 
             <div className="pt-2">

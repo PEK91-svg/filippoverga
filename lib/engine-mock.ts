@@ -1,5 +1,5 @@
 import { Quote, Flag } from './types';
-import { MOCK_QUOTES, MOCK_LINE_ITEMS, MOCK_CANONICAL_ITEMS, MOCK_FLAGS, MOCK_TAX_INCENTIVES } from './mock-data';
+import { MOCK_QUOTES, MOCK_LINE_ITEMS, MOCK_CANONICAL_ITEMS, MOCK_FLAGS } from './mock-data';
 
 export interface ScopeAdjustmentDetail {
   canonical_id: string;
@@ -87,16 +87,3 @@ export function calculateGoodsVatSplit(totalGoodsCost: number, totalLaborCost: n
   };
 }
 
-export function estimateTaxDeduction(projectNet: number, isPrimaCasa: boolean = true) {
-  const incentive = MOCK_TAX_INCENTIVES.find(t => t.code === (isPrimaCasa ? 'BONUS_CASA_50' : 'BONUS_CASA_36')) || MOCK_TAX_INCENTIVES[0];
-  const eligibleAmount = Math.min(projectNet * 1.10, incentive.cap_amount);
-  const totalDeduction = (eligibleAmount * incentive.rate) / 100;
-  const annualInstallment = totalDeduction / 10; // Split over 10 years in Italy
-
-  return {
-    incentive,
-    eligibleAmount,
-    totalDeduction,
-    annualInstallment
-  };
-}

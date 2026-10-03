@@ -10,16 +10,24 @@ import {
   ChevronRight, 
   Check
 } from 'lucide-react';
-import { MOCK_PROJECT, MOCK_QUOTES, MOCK_TAX_INCENTIVES } from '@/lib/mock-data';
+import { MOCK_PROJECT, MOCK_QUOTES } from '@/lib/mock-data';
 import { formatCurrency } from '@/lib/utils';
-import { estimateTaxDeduction } from '@/lib/engine-mock';
+import {
+  ASSUMED_RENOVATION_VAT_RATE,
+  TAX_INCENTIVE_CODES,
+  TAX_INCENTIVES_2026,
+  estimateTaxDeduction,
+} from '@/lib/tax-incentives';
 
 export default function TaxAndExportPage() {
-  const [selectedIncentiveCode, setSelectedIncentiveCode] = useState<string>('BONUS_CASA_50');
+  const [selectedIncentiveCode, setSelectedIncentiveCode] = useState<string>(
+    TAX_INCENTIVE_CODES.bonusCasaAbitazionePrincipale,
+  );
   const [exportSuccessMsg, setExportSuccessMsg] = useState<string | null>(null);
 
   const bestQuote = MOCK_QUOTES[0]; // Edilizia Moderna € 48.500
-  const deductionDetails = estimateTaxDeduction(bestQuote.raw_total_net, true);
+  const deductionDetails = estimateTaxDeduction(bestQuote.raw_total_net, selectedIncentiveCode);
+  const assumedVatPercent = Math.round(ASSUMED_RENOVATION_VAT_RATE * 100);
 
   const handleSimulatedExport = (format: 'pdf' | 'xlsx') => {
     setExportSuccessMsg(`Download avviato: ${format === 'pdf' ? 'Report_Confronto_ScopeAdjusted.pdf' : 'Matrice_Confronto_Preventivi.xlsx'}`);
@@ -64,7 +72,7 @@ export default function TaxAndExportPage() {
 
         {/* Incentive Selection Radio Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {MOCK_TAX_INCENTIVES.map((inc) => (
+          {TAX_INCENTIVES_2026.map((inc) => (
             <div
               key={inc.code}
               onClick={() => setSelectedIncentiveCode(inc.code)}
@@ -78,15 +86,15 @@ export default function TaxAndExportPage() {
                 <div className="flex justify-between items-center">
                   <span className="font-black text-sm text-stone-900">{inc.name}</span>
                   <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-950 text-xs font-black">
-                    {inc.rate}%
+                    {inc.ratePercent}%
                   </span>
                 </div>
                 <div className="text-xs text-stone-600 mt-2 font-medium">
-                  Tetto spesa: <strong>{formatCurrency(inc.cap_amount)}</strong>
+                  {inc.capLabel}: <strong>{formatCurrency(inc.capAmount)}</strong>
                 </div>
               </div>
               <div className="text-[11px] text-stone-500 border-t border-stone-200/60 pt-2 font-mono">
-                {inc.law_reference}
+                {inc.lawReference}
               </div>
             </div>
           ))}
@@ -97,9 +105,13 @@ export default function TaxAndExportPage() {
           <div>
             <div className="text-xs text-stone-400 uppercase tracking-wider font-bold">Importo Lavori Ammissibile</div>
             <div className="text-2xl font-black text-white mt-1 tabular-numbers">
-              {formatCurrency(deductionDetails.eligibleAmount)}
+              {formatCurrency(deductionDetails.eligibleExpense)}
             </div>
-            <div className="text-[11px] text-stone-500 mt-0.5">IVA 10% inclusa (€ 53.350 lordi)</div>
+            <div className="text-[11px] text-stone-500 mt-0.5">
+              {deductionDetails.expenseCapped
+                ? `Tetto spesa ${formatCurrency(deductionDetails.incentive.capAmount)} su lordo ${formatCurrency(deductionDetails.grossExpense)}`
+                : `IVA ${assumedVatPercent}% inclusa (${formatCurrency(deductionDetails.grossExpense)} lordi)`}
+            </div>
           </div>
 
           <div className="border-t sm:border-t-0 sm:border-l sm:border-r border-stone-800 pt-4 sm:pt-0">
@@ -107,7 +119,12 @@ export default function TaxAndExportPage() {
             <div className="text-3xl font-black text-white mt-1 tabular-numbers">
               {formatCurrency(deductionDetails.totalDeduction)}
             </div>
-            <div className="text-[11px] text-stone-400 mt-0.5 font-medium">Pari al 50% in 10 anni</div>
+            <div className="text-[11px] text-stone-400 mt-0.5 font-medium">
+              {deductionDetails.incentive.name}: {deductionDetails.incentive.ratePercent}% in {deductionDetails.incentive.installmentYears} anni
+              {deductionDetails.deductionCapped
+                ? ` (tetto detrazione ${formatCurrency(deductionDetails.incentive.capAmount)})`
+                : ''}
+            </div>
           </div>
 
           <div className="border-t sm:border-t-0 border-stone-800 pt-4 sm:pt-0">
@@ -115,7 +132,9 @@ export default function TaxAndExportPage() {
             <div className="text-2xl font-black text-white mt-1 tabular-numbers">
               {formatCurrency(deductionDetails.annualInstallment)} <span className="text-xs font-normal text-stone-400">/ anno</span>
             </div>
-            <div className="text-[11px] text-stone-500 mt-0.5 font-medium">per 10 quote annuali costanti</div>
+            <div className="text-[11px] text-stone-500 mt-0.5 font-medium">
+              per {deductionDetails.incentive.installmentYears} quote annuali costanti
+            </div>
           </div>
         </div>
       </div>

@@ -134,6 +134,7 @@ export interface PriceBenchmark {
   updated_at: string;
 }
 
+/** Riga della tabella SQL `tax_incentives`. Il simulatore usa `lib/tax-incentives.ts`. */
 export interface TaxIncentive {
   code: string;
   name: string;
