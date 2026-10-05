@@ -15,9 +15,13 @@ import {
 } from 'lucide-react';
 import { MOCK_PROJECT, MOCK_QUOTES, MOCK_FLAGS } from '@/lib/mock-data';
 import { formatCurrency } from '@/lib/utils';
+import { TAX_INCENTIVE_CODES, estimateTaxDeduction } from '@/lib/tax-incentives';
 
 export default function DashboardPage() {
   const criticalFlagsCount = MOCK_FLAGS.filter(f => f.severity === 'critical').length;
+  const rossiQuote = MOCK_QUOTES.find((quote) => quote.id === 'quote-b');
+  const omissionAmount = rossiQuote ? rossiQuote.scope_adjusted_net - rossiQuote.raw_total_net : 0;
+  const deduction = estimateTaxDeduction(MOCK_QUOTES[0].raw_total_net, TAX_INCENTIVE_CODES.bonusCasaAbitazionePrincipale);
 
   return (
     <div className="space-y-8">
@@ -109,7 +113,7 @@ export default function DashboardPage() {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-black text-emerald-700 tabular-numbers">
-              + € 14.250
+              + {formatCurrency(omissionAmount)}
             </div>
             <div className="text-xs text-emerald-800 font-bold mt-0.5">
               Reintegrate sul Preventivo B
@@ -145,7 +149,7 @@ export default function DashboardPage() {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-black text-stone-900 tabular-numbers">
-              {formatCurrency(26675)}
+              {formatCurrency(deduction.totalDeduction)}
             </div>
             <div className="text-xs text-stone-500 mt-0.5 font-medium">
               Recuperabili in 10 anni

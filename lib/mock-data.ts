@@ -316,11 +316,11 @@ export const MOCK_QUOTES: Quote[] = [
     validity_days: 30,
     storage_path: '/documents/preventivo_edilizia_moderna.pdf',
     status: 'reviewed',
-    raw_total_net: 48500,
-    raw_total_vat: 4850,
-    raw_total_gross: 53350,
-    scope_adjusted_net: 48500,
-    scope_adjusted_gross: 53350,
+    raw_total_net: 40600,
+    raw_total_vat: 4600,
+    raw_total_gross: 45200,
+    scope_adjusted_net: 40600,
+    scope_adjusted_gross: 45200,
     payment_terms: { acconto_pct: 20, sal: [30, 30], saldo_pct: 20 },
     duration_days: 75,
     penalty_clause: '€ 100 per ogni giorno di ritardo oltre la data di consegna prevista.',
@@ -342,8 +342,8 @@ export const MOCK_QUOTES: Quote[] = [
     raw_total_net: 36200,
     raw_total_vat: 3620,
     raw_total_gross: 39820,
-    scope_adjusted_net: 50450,
-    scope_adjusted_gross: 55495,
+    scope_adjusted_net: 47410,
+    scope_adjusted_gross: 52151,
     payment_terms: { acconto_pct: 30, sal: [30, 30], saldo_pct: 10 },
     duration_days: 90,
     penalty_clause: null,
@@ -362,11 +362,11 @@ export const MOCK_QUOTES: Quote[] = [
     validity_days: 45,
     storage_path: '/documents/preventivo_lombarde.pdf',
     status: 'reviewed',
-    raw_total_net: 44800,
-    raw_total_vat: 4480,
-    raw_total_gross: 49280,
-    scope_adjusted_net: 47900,
-    scope_adjusted_gross: 52690,
+    raw_total_net: 39385,
+    raw_total_vat: 3938.5,
+    raw_total_gross: 43323.5,
+    scope_adjusted_net: 43885,
+    scope_adjusted_gross: 48273.5,
     payment_terms: { acconto_pct: 40, sal: [40], saldo_pct: 20 },
     duration_days: 60,
     penalty_clause: null,
@@ -416,7 +416,7 @@ export const MOCK_LINE_ITEMS: LineItem[] = [
   {
     id: 'li-a-03',
     quote_id: 'quote-a',
-    raw_description: 'Calo in basso macerie, carico su autocarro e trasporto a discarica autorizzata con formulario formulari formulari.',
+    raw_description: 'Calo in basso macerie, carico su autocarro e trasporto a discarica autorizzata con formulario.',
     category_id: 'cat-03',
     category_code: '03',
     quantity: 18,
@@ -963,6 +963,14 @@ export const MOCK_LINE_ITEMS: LineItem[] = [
   }
 ];
 
+function lineById(id: string): LineItem {
+  const item = MOCK_LINE_ITEMS.find((line) => line.id === id);
+  if (!item) {
+    throw new Error(`Voce di computo mancante: ${id}`);
+  }
+  return item;
+}
+
 export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
   {
     id: 'canon-01',
@@ -975,8 +983,8 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-c'],
     missing_from_quote_ids: ['quote-b'],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[0],
-      'quote-c': MOCK_LINE_ITEMS[9]
+      'quote-a': lineById('li-a-01'),
+      'quote-c': lineById('li-c-01')
     },
     estimated_missing_price: 1175
   },
@@ -991,9 +999,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[1],
-      'quote-b': MOCK_LINE_ITEMS[13],
-      'quote-c': MOCK_LINE_ITEMS[22]
+      'quote-a': lineById('li-a-02'),
+      'quote-b': lineById('li-b-02'),
+      'quote-c': lineById('li-c-02')
     },
     estimated_missing_price: 0
   },
@@ -1008,8 +1016,8 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-c'],
     missing_from_quote_ids: ['quote-b'],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[2],
-      'quote-c': MOCK_LINE_ITEMS[23]
+      'quote-a': lineById('li-a-03'),
+      'quote-c': lineById('li-c-03')
     },
     estimated_missing_price: 1755
   },
@@ -1024,9 +1032,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[3],
-      'quote-b': MOCK_LINE_ITEMS[14],
-      'quote-c': MOCK_LINE_ITEMS[24]
+      'quote-a': lineById('li-a-04'),
+      'quote-b': lineById('li-b-04'),
+      'quote-c': lineById('li-c-04')
     },
     estimated_missing_price: 0
   },
@@ -1041,9 +1049,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[4],
-      'quote-b': MOCK_LINE_ITEMS[15],
-      'quote-c': MOCK_LINE_ITEMS[25]
+      'quote-a': lineById('li-a-05'),
+      'quote-b': lineById('li-b-05'),
+      'quote-c': lineById('li-c-05')
     },
     estimated_missing_price: 0
   },
@@ -1058,9 +1066,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[5],
-      'quote-b': MOCK_LINE_ITEMS[16],
-      'quote-c': MOCK_LINE_ITEMS[26]
+      'quote-a': lineById('li-a-06'),
+      'quote-b': lineById('li-b-06'),
+      'quote-c': lineById('li-c-06')
     },
     estimated_missing_price: 0
   },
@@ -1075,9 +1083,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[6],
-      'quote-b': MOCK_LINE_ITEMS[17],
-      'quote-c': MOCK_LINE_ITEMS[27]
+      'quote-a': lineById('li-a-07'),
+      'quote-b': lineById('li-b-07'),
+      'quote-c': lineById('li-c-07')
     },
     estimated_missing_price: 0
   },
@@ -1092,8 +1100,8 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-c'],
     missing_from_quote_ids: ['quote-b'],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[7],
-      'quote-c': MOCK_LINE_ITEMS[28]
+      'quote-a': lineById('li-a-08'),
+      'quote-c': lineById('li-c-08')
     },
     estimated_missing_price: 3230
   },
@@ -1108,9 +1116,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[8],
-      'quote-b': MOCK_LINE_ITEMS[18],
-      'quote-c': MOCK_LINE_ITEMS[29]
+      'quote-a': lineById('li-a-09'),
+      'quote-b': lineById('li-b-09'),
+      'quote-c': lineById('li-c-09')
     },
     estimated_missing_price: 0
   },
@@ -1125,9 +1133,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[9],
-      'quote-b': MOCK_LINE_ITEMS[19],
-      'quote-c': MOCK_LINE_ITEMS[30]
+      'quote-a': lineById('li-a-10'),
+      'quote-b': lineById('li-b-10'),
+      'quote-c': lineById('li-c-10')
     },
     estimated_missing_price: 0
   },
@@ -1142,9 +1150,9 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-b', 'quote-c'],
     missing_from_quote_ids: [],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[10],
-      'quote-b': MOCK_LINE_ITEMS[20],
-      'quote-c': MOCK_LINE_ITEMS[31]
+      'quote-a': lineById('li-a-14'),
+      'quote-b': lineById('li-b-14'),
+      'quote-c': lineById('li-c-14')
     },
     estimated_missing_price: 0
   },
@@ -1159,7 +1167,7 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a'],
     missing_from_quote_ids: ['quote-b', 'quote-c'],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[11]
+      'quote-a': lineById('li-a-17')
     },
     estimated_missing_price: 4500
   },
@@ -1174,8 +1182,8 @@ export const MOCK_CANONICAL_ITEMS: CanonicalItem[] = [
     present_in_quote_ids: ['quote-a', 'quote-c'],
     missing_from_quote_ids: ['quote-b'],
     line_item_map: {
-      'quote-a': MOCK_LINE_ITEMS[12],
-      'quote-c': MOCK_LINE_ITEMS[32]
+      'quote-a': lineById('li-a-18'),
+      'quote-c': lineById('li-c-18')
     },
     estimated_missing_price: 550
   }
@@ -1242,7 +1250,7 @@ export const MOCK_FLAGS: Flag[] = [
     severity: 'critical',
     rule_code: 'ADVANCE_TOO_HIGH',
     message: 'Acconto iniziale richiesto superiore al limite consigliato: 40% del totale (Max consigliato 30%).',
-    evidence: 'Termini di pagamento: Acconto 40% alla firma (€ 17.920 netti), SAL 40%, Saldo 20%.',
+    evidence: 'Termini di pagamento: Acconto 40% alla firma (€ 15.754 netti), SAL 40%, Saldo 20%.',
     created_at: '2026-08-12T16:48:00Z'
   },
   {

@@ -45,6 +45,7 @@ export default function AreaPersonalePage() {
   }
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
+  const omissionsTotal = projects.reduce((sum, project) => sum + project.scope_saved_amount, 0);
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-4">
@@ -107,7 +108,7 @@ export default function AreaPersonalePage() {
         <div className="luminous-card p-5 flex justify-between items-center border-t-4 border-t-emerald-600">
           <div>
             <div className="text-[11px] font-bold text-slate-500 uppercase">Omissioni Scovate</div>
-            <div className="text-2xl font-black text-emerald-700 mt-1 tabular-numbers">+ € 24.250</div>
+            <div className="text-2xl font-black text-emerald-700 mt-1 tabular-numbers">+ {formatCurrency(omissionsTotal)}</div>
           </div>
           <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
             <TrendingDown className="w-5 h-5" />

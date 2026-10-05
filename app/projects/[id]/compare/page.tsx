@@ -154,7 +154,7 @@ export default function CompareMatrixPage() {
         <div className="grid grid-cols-12 border-b border-slate-200 bg-slate-50/70 divide-x divide-slate-200">
           
           {/* Frozen Category/Work Header */}
-          <div className="col-span-4 p-5 flex flex-col justify-between">
+          <div className="col-span-12 lg:col-span-3 p-5 flex flex-col justify-between">
             <div>
               <div className="text-[11px] font-black text-blue-600 uppercase tracking-wider">
                 Voci di Capitolato Normalizzate
@@ -170,11 +170,11 @@ export default function CompareMatrixPage() {
 
           {/* 3 Vendor Frozen Columns */}
           {MOCK_QUOTES.map((q) => {
-            const hasOmissions = q.id === 'quote-b';
             const scopeDelta = q.scope_adjusted_net - q.raw_total_net;
+            const hasOmissions = scopeDelta > 0;
 
             return (
-              <div key={q.id} className="col-span-8 sm:col-span-4 lg:col-span-8/3 p-5 flex flex-col justify-between space-y-3">
+              <div key={q.id} className="col-span-12 lg:col-span-3 p-5 flex flex-col justify-between space-y-3">
                 
                 <div className="flex justify-between items-start">
                   <div>
@@ -260,7 +260,7 @@ export default function CompareMatrixPage() {
                 
                 {/* Column 1: Canonical Description & Category */}
                 <div 
-                  className="col-span-4 p-4 space-y-1.5 cursor-pointer"
+                  className="col-span-12 lg:col-span-3 p-4 space-y-1.5 cursor-pointer"
                   onClick={() => setSelectedCanonical(canonical)}
                 >
                   <div className="flex items-center space-x-2">
@@ -289,7 +289,7 @@ export default function CompareMatrixPage() {
                   const lineItem = canonical.line_item_map[q.id];
 
                   return (
-                    <div key={q.id} className="col-span-8 sm:col-span-4 lg:col-span-8/3 p-4 flex flex-col justify-between space-y-2">
+                    <div key={q.id} className="col-span-12 lg:col-span-3 p-4 flex flex-col justify-between space-y-2">
                       {lineItem ? (
                         <div className="space-y-1">
                           <div className="text-slate-800 line-clamp-2 leading-relaxed">

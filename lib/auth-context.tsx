@@ -69,7 +69,7 @@ const DEFAULT_PROJECTS: UserProjectSummary[] = [
     province: 'MI',
     status: '3 Preventivi Riconciliati',
     quotes_count: 3,
-    scope_saved_amount: 14250,
+    scope_saved_amount: 11210,
     created_at: '2026-08-01'
   },
   {
